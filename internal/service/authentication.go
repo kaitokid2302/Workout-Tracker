@@ -1,13 +1,22 @@
 package service
 
-import "github.com/kaitokid2302/Workout-Tracker/internal/db"
+import (
+	"github.com/kaitokid2302/Workout-Tracker/internal/db"
+	"github.com/kaitokid2302/Workout-Tracker/internal/repository"
+)
 
-type Authen struct{}
+type AuthenService struct {
+	user *repository.UserService
+}
 
-func (authen *Authen) Login(jwt string) bool {
+func (authen *AuthenService) Login(jwt string) bool {
 	return false
 }
 
-func (authen *Authen) Register(user db.User) string {
+func (authen *AuthenService) Register(user db.User) string {
 	return ""
+}
+
+func NewAuthen(user *repository.UserService) *AuthenService {
+	return &AuthenService{user: user}
 }
