@@ -10,6 +10,7 @@ import (
 type User struct {
 	gorm.Model
 	Name     string
+	Username string
 	Email    string
 	Password string
 	Workout  []Workout
@@ -21,7 +22,7 @@ type Workout struct {
 	Date     time.Time
 	Finish   bool
 	Comment  string
-	UserID   int
+	UserID   uint
 	Exercise []Exercise
 }
 
@@ -31,7 +32,7 @@ type Exercise struct {
 	Repetition int
 	Set        int
 	Weight     int
-	WorkoutID  int
+	WorkoutID  uint
 }
 
 func DBInit() *gorm.DB {
