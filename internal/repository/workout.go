@@ -1,6 +1,9 @@
 package repository
 
-import "github.com/kaitokid2302/Workout-Tracker/internal/db"
+import (
+	"github.com/kaitokid2302/Workout-Tracker/internal/db"
+	"gorm.io/gorm"
+)
 
 type WorkoutRepository interface {
 	FindUserByUsername(username string) (*db.User, error)
@@ -15,4 +18,8 @@ type WorkoutRepository interface {
 	WorkoutFuture(user *db.User) ([]*db.Workout, error)
 	WorkoutDone(user *db.User) ([]*db.Workout, error)
 	PastWorkout(user *db.User) ([]*db.Workout, error)
+}
+
+type WorkoutRepositoryImpl struct {
+	db *gorm.DB
 }

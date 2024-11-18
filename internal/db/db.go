@@ -7,8 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var Client *gorm.DB
-
 type User struct {
 	gorm.Model
 	Name     string
@@ -36,13 +34,14 @@ type Exercise struct {
 	WorkoutID  int
 }
 
-func init() {
+func DBInit() *gorm.DB {
 	dns := "host=localhost user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Europe/Moscow"
 	var er error
-	Client, er = gorm.Open(postgres.Open(dns), &gorm.Config{})
+	Client, er := gorm.Open(postgres.Open(dns), &gorm.Config{})
 	if er != nil {
 		panic(er)
 	}
 	// Client.Migrator().DropTable(&User{}, &Workout{}, &Exercise{})
 	Client.AutoMigrate(&User{}, &Workout{}, &Exercise{})
+	return Client
 }
