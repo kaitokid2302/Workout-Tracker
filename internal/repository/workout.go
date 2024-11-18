@@ -132,3 +132,7 @@ func (w *WorkoutRepositoryImpl) PastWorkout(user *db.User) ([]*db.Workout, error
 	return workout, er
 
 }
+
+func NewWorkoutRepository(db *gorm.DB) WorkoutRepository {
+	return &WorkoutRepositoryImpl{db: db}
+}
