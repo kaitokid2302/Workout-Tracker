@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
+//go:generate mockgen -package=$GOPACKAGE -destination=mock_$GOFILE.go -source=$GOFILE
 type WorkoutRepository interface {
 	FindUserByUsername(username string) (*db.User, error)
 	CreateEmptyWorkout(user *db.User, workoutName string) error
