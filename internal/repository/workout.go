@@ -100,7 +100,15 @@ func (w *WorkoutRepositoryImpl) FinishWorkout(workout *db.Workout) error {
 func (w *WorkoutRepositoryImpl) WorkoutToday(user *db.User) ([]*db.Workout, error) {
 	client := w.db
 	var workout []*db.Workout
-	er := client.Where("user_id = ? AND date = ?", user.ID, time.Now().Format("2006-01-02")).Find(&workout).Error
+	today := time.Now().Format("2006-01-02")
+	tomorrow := time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	er := client.Debug().
+		Where("user_id = ? AND date >= ? AND date < ?",
+			user.ID,
+			today,
+			tomorrow).
+		Find(&workout).Error
+
 	// sort by time
 	sort.Slice(workout, func(i, j int) bool {
 		return workout[i].Date.Before(workout[j].Date)
@@ -111,7 +119,8 @@ func (w *WorkoutRepositoryImpl) WorkoutToday(user *db.User) ([]*db.Workout, erro
 func (w *WorkoutRepositoryImpl) WorkoutFuture(user *db.User) ([]*db.Workout, error) {
 	client := w.db
 	var workout []*db.Workout
-	er := client.Where("user_id = ? AND date > ?", user.ID, time.Now().Format("2006-01-02")).Find(&workout).Error
+	future := time.Now().AddDate(0, 0, 1).Format("2006-01-02")
+	er := client.Debug().Where("user_id = ? AND date >= ?", user.ID, future).Find(&workout).Error
 	sort.Slice(workout, func(i, j int) bool {
 		return workout[i].Date.Before(workout[j].Date)
 	})
