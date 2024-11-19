@@ -22,16 +22,16 @@ func TestLogin(t *testing.T) {
 
 func TestRegister(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	m := repository.NewMockUserService(ctrl)
+	m := repository.NewMockUserRepository(ctrl)
 
 	// Case 1: lam - success
 	// First check if user exists
-	m.EXPECT().FindUser("lam").Return(errors.New("user not found"))
+	m.EXPECT().FindUser("lam").Return(nil, errors.New("user not found"))
 	// Then add user
 	m.EXPECT().AddUser(&db.User{Username: "lam"}).Return(nil)
 
 	// Case 2: linh - fail because user exists
-	m.EXPECT().FindUser("linh").Return(nil) // user found
+	m.EXPECT().FindUser("linh").Return(nil, nil) // user found
 	// AddUser won't be called in this case because user exists
 
 	authenService := NewAuthen(m)

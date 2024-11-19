@@ -9,7 +9,7 @@ import (
 )
 
 type AuthenService struct {
-	user repository.UserService
+	user repository.UserRepository
 }
 
 func (authen *AuthenService) Login(s string) bool {
@@ -32,7 +32,7 @@ func (authen *AuthenService) Login(s string) bool {
 }
 
 func (authen *AuthenService) Register(user db.User) (string, error) {
-	if authen.user.FindUser(user.Username) != nil {
+	if _, er := authen.user.FindUser(user.Username); er != nil {
 		var key = "lam dep trai qua nhi, ahihi, lam yeu lam, lam tung an trom tien cua me"
 		var t *jwt.Token = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"iss":  "mra2322001",
@@ -46,6 +46,6 @@ func (authen *AuthenService) Register(user db.User) (string, error) {
 	return "", errors.New("username existed")
 }
 
-func NewAuthen(user repository.UserService) *AuthenService {
+func NewAuthen(user repository.UserRepository) *AuthenService {
 	return &AuthenService{user: user}
 }
