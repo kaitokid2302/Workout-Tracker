@@ -10,7 +10,7 @@ import (
 )
 
 func TestLogin(t *testing.T) {
-	authen := Authen{}
+	authen := AuthenService{}
 	s := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 	assert.True(t, authen.Login(s))
 
@@ -31,5 +31,5 @@ func TestRegister(t *testing.T) {
 	m.EXPECT().FindUser("linh").Return(errors.New("user not found"))
 	m.EXPECT().AddUser("thoa").Return(errors.New("username exists"))
 
-	authenService := NewAuthen(&m)
+	authenService := NewAuthen(m)
 }
