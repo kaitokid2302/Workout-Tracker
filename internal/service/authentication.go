@@ -21,7 +21,7 @@ func (authen *AuthenService) Login(s string) bool {
 		return []byte(key), nil
 	})
 	if er != nil {
-		panic(er)
+		return false
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		return claims.Valid() == nil
