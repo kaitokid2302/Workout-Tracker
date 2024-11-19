@@ -37,7 +37,7 @@ func (authen *AuthenService) Register(user db.User) (string, error) {
 		var t *jwt.Token = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"iss":  "mra2322001",
 			"role": "user",
-			"exp":  24 * 3600,
+			"exp":  24 * 3600 * 30,
 		})
 		s, _ := t.SignedString([]byte(key))
 		authen.user.AddUser(&user)
