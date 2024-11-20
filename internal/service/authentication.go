@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"time"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/kaitokid2302/Workout-Tracker/internal/db"
@@ -24,7 +25,7 @@ func (authen *AuthenService) Login(username, password string) (bool, string) {
 			"iss":  "mra2322001",
 			"sub":  user.Username,
 			"role": "user",
-			"exp":  24 * 3600 * 30,
+			"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
 		})
 		s, _ := t.SignedString([]byte(key))
 		return true, s
@@ -40,7 +41,7 @@ func (authen *AuthenService) Register(user db.User) (string, error) {
 			"iss":  "mra2322001",
 			"sub":  user.Username,
 			"role": "user",
-			"exp":  24 * 3600 * 30,
+			"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
 		})
 		s, _ := t.SignedString([]byte(key))
 		authen.user.AddUser(&user)

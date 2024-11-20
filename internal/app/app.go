@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kaitokid2302/Workout-Tracker/internal/db"
 	"github.com/kaitokid2302/Workout-Tracker/internal/handler"
+	"github.com/kaitokid2302/Workout-Tracker/internal/handler/middleware"
 	"github.com/kaitokid2302/Workout-Tracker/internal/handler/user"
 	"github.com/kaitokid2302/Workout-Tracker/internal/repository"
 	"github.com/kaitokid2302/Workout-Tracker/internal/service"
@@ -21,7 +22,9 @@ func (app *App) SetUp() {
 	userRepository := repository.NewUserRepository(clientDB)
 	userService := service.NewAuthen(userRepository)
 	userHandler := user.NewUserHandler(userService)
-	app.handler = *handler.NewHandler(userHandler)
+	middlewareHandler := middleware.NewMiddlewareHandler()
+	middleware := middleware.NewMiddleware()
+	app.handler = *handler.NewHandler(userHandler, middlewareHandler, middleware)
 
 	app.handler.SetupRoute(app.server)
 }

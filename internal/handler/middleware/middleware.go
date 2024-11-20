@@ -37,7 +37,7 @@ func (m *Middleware) Auth() gin.HandlerFunc {
 				c.AbortWithStatus(Unauthorized)
 				return
 			}
-			username, ok := claims["username"].(string)
+			username, ok := claims["sub"].(string)
 			if ok {
 				c.Set("username", username)
 				c.Next()
