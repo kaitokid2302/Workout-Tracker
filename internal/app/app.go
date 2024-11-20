@@ -6,6 +6,7 @@ import (
 	"github.com/kaitokid2302/Workout-Tracker/internal/handler"
 	"github.com/kaitokid2302/Workout-Tracker/internal/handler/middleware"
 	"github.com/kaitokid2302/Workout-Tracker/internal/handler/user"
+	"github.com/kaitokid2302/Workout-Tracker/internal/handler/workout"
 	"github.com/kaitokid2302/Workout-Tracker/internal/repository"
 	"github.com/kaitokid2302/Workout-Tracker/internal/service"
 )
@@ -24,7 +25,10 @@ func (app *App) SetUp() {
 	userHandler := user.NewUserHandler(userService)
 	middlewareHandler := middleware.NewMiddlewareHandler()
 	middleware := middleware.NewMiddleware()
-	app.handler = *handler.NewHandler(userHandler, middlewareHandler, middleware)
+	workoutRepository := repository.NewWorkoutRepository(clientDB)
+	workoutService := service.NewWorkoutService(workoutRepository, userRepository)
+	workoutHandler := workout.NewWorkoutHandler(workoutService)
+	app.handler = *handler.NewHandler(userHandler, middlewareHandler, middleware, workoutHandler)
 
 	app.handler.SetupRoute(app.server)
 }
