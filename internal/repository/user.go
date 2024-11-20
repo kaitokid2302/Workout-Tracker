@@ -11,6 +11,7 @@ import (
 type UserRepository interface {
 	AddUser(user *db.User) error
 	FindUser(username string) (*db.User, error)
+	DeleteUser()
 }
 
 type UserRepositoryImpl struct {

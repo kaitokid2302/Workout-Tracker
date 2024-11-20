@@ -53,6 +53,18 @@ func (mr *MockUserRepositoryMockRecorder) AddUser(user any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUser", reflect.TypeOf((*MockUserRepository)(nil).AddUser), user)
 }
 
+// DeleteUser mocks base method.
+func (m *MockUserRepository) DeleteUser() {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "DeleteUser")
+}
+
+// DeleteUser indicates an expected call of DeleteUser.
+func (mr *MockUserRepositoryMockRecorder) DeleteUser() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUser", reflect.TypeOf((*MockUserRepository)(nil).DeleteUser))
+}
+
 // FindUser mocks base method.
 func (m *MockUserRepository) FindUser(username string) (*db.User, error) {
 	m.ctrl.T.Helper()
