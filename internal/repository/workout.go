@@ -13,6 +13,7 @@ type WorkoutRepository interface {
 	FindUserByUsername(username string) (*db.User, error)
 	CreateEmptyWorkout(user *db.User, workoutName string) error
 	AddExerciseToWorkout(workout *db.Workout, exercise *db.Exercise) error
+	FindWorkoutByID(workoutID uint) (*db.Workout, error)
 	DeleteExercise(workout *db.Workout, exerciseID uint) error
 	EditComment(workout *db.Workout, comment string) error
 	DeleteWorkout(workout *db.Workout) error
@@ -65,6 +66,13 @@ func (w *WorkoutRepositoryImpl) AddExerciseToWorkout(workout *db.Workout, exerci
 	}
 	er := client.Save(&e).Error
 	return er
+}
+
+func (w *WorkoutRepositoryImpl) FindWorkoutByID(workoutID uint) (*db.Workout, error) {
+	client := w.db
+	var workout db.Workout
+	er := client.Where("id = ?", workoutID).First(&workout).Error
+	return &workout, er
 }
 
 func (w *WorkoutRepositoryImpl) DeleteExercise(workout *db.Workout, exerciseID uint) error {

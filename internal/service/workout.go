@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"time"
 
 	"github.com/kaitokid2302/Workout-Tracker/internal/db"
@@ -10,7 +11,7 @@ import (
 type WorkoutService interface {
 	CreateWorkout(username string, workout *db.Workout) error
 	DeleteExercise(username string, exerciseID uint) error
-	AddExercise(username string, exercise *db.Exercise) error
+	AddExercise(username string, workoutID uint, exercise *db.Exercise) error
 	EditComment(username string, comment string) error
 	DeleteWorkout(username string, exerciseID uint) error
 	ScheDuelWorkout(userID uint, workoutID uint, time time.Time)
@@ -50,8 +51,23 @@ func (w *WorkoutServiceImpl) DeleteExercise(username string, exerciseID uint) er
 	panic("not implemented") // TODO: Implement
 }
 
-func (w *WorkoutServiceImpl) AddExercise(username string, exercise *db.Exercise) error {
-	panic("not implemented") // TODO: Implement
+func (w *WorkoutServiceImpl) AddExercise(username string, workoutID uint, exercise *db.Exercise) error {
+	workout, er := w.workoutRepository.FindWorkoutByID(workoutID)
+	if er != nil {
+		return er
+	}
+	er = w.workoutRepository.AddExerciseToWorkout(workout, exercise)
+	if er != nil {
+		return er
+	}
+	user, er := w.workoutRepository.FindUserByUsername(username)
+	if er != nil {
+		return er
+	}
+	if user.ID != workout.UserID {
+		return errors.New("user is not owner of workout")
+	}
+	return nil
 }
 
 func (w *WorkoutServiceImpl) EditComment(username string, comment string) error {

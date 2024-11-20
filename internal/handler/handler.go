@@ -26,5 +26,7 @@ func (h *Hanlder) SetupRoute(engine *gin.Engine) {
 	{
 		v1.GET("/sample", h.middlewareHandler.SampleAuth)
 		v1.POST("/workout", h.workoutHandler.AddWorkout)
+		// add exercise to workout by id
+		v1.POST("/workout/:id/exercise", h.workoutHandler.AddExercise)
 	}
 }
