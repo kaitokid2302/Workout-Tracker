@@ -8,7 +8,7 @@ import (
 )
 
 type WorkoutService interface {
-	CreateWorkout(username string, exercise []*db.Exercise) error
+	CreateWorkout(username string, workout *db.Workout) error
 	DeleteExercise(username string, exerciseID uint) error
 	AddExercise(username string, exercise *db.Exercise) error
 	EditComment(username string, comment string) error
@@ -26,8 +26,24 @@ type WorkoutServiceImpl struct {
 	userRepository    repository.UserRepository
 }
 
-func (w *WorkoutServiceImpl) CreateWorkout(username string, exercise []*db.Exercise) error {
-	panic("not implemented") // TODO: Implement
+func (w *WorkoutServiceImpl) CreateWorkout(username string, workout *db.Workout) error {
+	user, err := w.workoutRepository.FindUserByUsername(username)
+	if err != nil {
+		return err
+	}
+	err = w.workoutRepository.CreateEmptyWorkout(user, workout.Name)
+	if err != nil {
+		return err
+	}
+	if workout.Exercise != nil {
+		for _, exercise := range workout.Exercise {
+			err = w.workoutRepository.AddExerciseToWorkout(workout, &exercise)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func (w *WorkoutServiceImpl) DeleteExercise(username string, exerciseID uint) error {
@@ -68,4 +84,11 @@ func (w *WorkoutServiceImpl) WorkoutDone(userID uint) []*db.Workout {
 
 func (w *WorkoutServiceImpl) PastWorkout(userID uint) []*db.Workout {
 	panic("not implemented") // TODO: Implement
+}
+
+func NewWorkoutService(workoutRepository repository.WorkoutRepository, userRepository repository.UserRepository) WorkoutService {
+	return &WorkoutServiceImpl{
+		workoutRepository: workoutRepository,
+		userRepository:    userRepository,
+	}
 }
