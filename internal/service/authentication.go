@@ -12,22 +12,24 @@ type AuthenService struct {
 	user repository.UserRepository
 }
 
-func (authen *AuthenService) Login(s string) bool {
-	var key = "lam dep trai qua nhi, ahihi, lam yeu lam, lam tung an trom tien cua me"
-	token, er := jwt.Parse(s, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("can not decode")
-		}
-		return []byte(key), nil
-	})
-	if er != nil {
-		return false
+func (authen *AuthenService) Login(username, password string) (bool, string) {
+
+	userRepository := authen.user
+
+	user, er := userRepository.FindUser(username)
+	if er == nil && user.Password == password {
+		// create token
+		var key = "lam dep trai qua nhi, ahihi, lam yeu lam, lam tung an trom tien cua me"
+		var t *jwt.Token = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"iss":  "mra2322001",
+			"sub":  user.Username,
+			"role": "user",
+			"exp":  24 * 3600 * 30,
+		})
+		s, _ := t.SignedString([]byte(key))
+		return true, s
 	}
-	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		return claims.Valid() == nil
-	} else {
-		return false
-	}
+	return false, ""
 
 }
 
@@ -36,6 +38,7 @@ func (authen *AuthenService) Register(user db.User) (string, error) {
 		var key = "lam dep trai qua nhi, ahihi, lam yeu lam, lam tung an trom tien cua me"
 		var t *jwt.Token = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"iss":  "mra2322001",
+			"sub":  user.Username,
 			"role": "user",
 			"exp":  24 * 3600 * 30,
 		})

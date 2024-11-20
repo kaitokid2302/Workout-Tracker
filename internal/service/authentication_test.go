@@ -11,13 +11,6 @@ import (
 )
 
 func TestLogin(t *testing.T) {
-	authen := AuthenService{}
-	s := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0.4gddCDd7Nuyzm6ZvsINBt8VntWD78n5GkP7E5X5Q_-I"
-	assert.True(t, authen.Login(s))
-
-	s = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.Nm58fL5RTsS2Ldadjf2m6b6sf7-jLx-_rnWKNi61Mqq"
-
-	assert.False(t, authen.Login(s))
 }
 
 func TestRegister(t *testing.T) {

@@ -11,7 +11,6 @@ import (
 type UserRepository interface {
 	AddUser(user *db.User) error
 	FindUser(username string) (*db.User, error)
-	DeleteUser()
 }
 
 type UserRepositoryImpl struct {
@@ -20,7 +19,7 @@ type UserRepositoryImpl struct {
 
 func (u *UserRepositoryImpl) AddUser(user *db.User) error {
 	var puser db.User
-	u.db.Where("user_name = ?", user.Username).First(&puser)
+	u.db.Where("username = ?", user.Username).First(&puser)
 	if puser.Username != "" {
 		return errors.New("username exists")
 	}
@@ -30,9 +29,13 @@ func (u *UserRepositoryImpl) AddUser(user *db.User) error {
 
 func (u *UserRepositoryImpl) FindUser(username string) (*db.User, error) {
 	var user db.User
-	u.db.Where("user_name = ?", username).First(&user)
+	u.db.Where("username = ?", username).First(&user)
 	if user.Username == "" {
 		return nil, errors.New("user not found")
 	}
 	return &user, nil
+}
+
+func NewUserRepository(db *gorm.DB) UserRepository {
+	return &UserRepositoryImpl{db: db}
 }
