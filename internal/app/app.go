@@ -9,7 +9,15 @@ import (
 	"github.com/kaitokid2302/Workout-Tracker/internal/handler/workout"
 	"github.com/kaitokid2302/Workout-Tracker/internal/repository"
 	"github.com/kaitokid2302/Workout-Tracker/internal/service"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title Workout Tracker API
+// @version 1.0
+// @description This is a workout tracking application API
+// @host localhost:8080
+// @BasePath /
 
 type App struct {
 	server  *gin.Engine
@@ -19,6 +27,8 @@ type App struct {
 func (app *App) SetUp() {
 	clientDB := db.DBInit()
 	app.server = gin.Default()
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	app.server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url))
 
 	userRepository := repository.NewUserRepository(clientDB)
 	userService := service.NewAuthen(userRepository)

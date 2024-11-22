@@ -11,7 +11,7 @@ import (
 //go:generate mockgen -package=$GOPACKAGE -destination=mock_$GOFILE.go -source=$GOFILE
 type WorkoutRepository interface {
 	FindUserByUsername(username string) (*db.User, error)
-	CreateEmptyWorkout(user *db.User, workoutName string) error
+	CreateEmptyWorkout(user *db.User, workoutName string) (*db.Workout, error)
 	AddExerciseToWorkout(workout *db.Workout, exercise *db.Exercise) error
 	FindWorkoutByID(workoutID uint) (*db.Workout, error)
 	DeleteExercise(workout *db.Workout, exerciseID uint) error
@@ -39,7 +39,7 @@ func (w *WorkoutRepositoryImpl) FindUserByUsername(username string) (*db.User, e
 
 }
 
-func (w *WorkoutRepositoryImpl) CreateEmptyWorkout(user *db.User, workoutName string) error {
+func (w *WorkoutRepositoryImpl) CreateEmptyWorkout(user *db.User, workoutName string) (*db.Workout, error) {
 	client := w.db
 	workout := db.Workout{
 		Name: workoutName,
@@ -51,7 +51,7 @@ func (w *WorkoutRepositoryImpl) CreateEmptyWorkout(user *db.User, workoutName st
 		Exercise: []db.Exercise{},
 	}
 	er := client.Save(&workout).Error
-	return er
+	return &workout, er
 }
 
 func (w *WorkoutRepositoryImpl) AddExerciseToWorkout(workout *db.Workout, exercise *db.Exercise) error {
@@ -65,6 +65,7 @@ func (w *WorkoutRepositoryImpl) AddExerciseToWorkout(workout *db.Workout, exerci
 		WorkoutID:  id,
 	}
 	er := client.Save(&e).Error
+	*exercise = e
 	return er
 }
 

@@ -32,7 +32,7 @@ func (w *WorkoutServiceImpl) CreateWorkout(username string, workout *db.Workout)
 	if err != nil {
 		return err
 	}
-	err = w.workoutRepository.CreateEmptyWorkout(user, workout.Name)
+	wo, err := w.workoutRepository.CreateEmptyWorkout(user, workout.Name)
 	if err != nil {
 		return err
 	}
@@ -44,6 +44,7 @@ func (w *WorkoutServiceImpl) CreateWorkout(username string, workout *db.Workout)
 			}
 		}
 	}
+	*workout = *wo
 	return nil
 }
 

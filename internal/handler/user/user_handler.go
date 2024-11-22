@@ -14,6 +14,14 @@ func NewUserHandler(userService *service.AuthenService) *UserHandler {
 	return &UserHandler{userService: userService}
 }
 
+// @Summary Register new user
+// @Description Register new user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param request body db.User true "User registration info"
+// @Success 200 {object} map[string]interface{} "token"
+// @Router /register [post]
 func (h *UserHandler) Register(c *gin.Context) {
 	// user.UserRegisterRequest
 	// map json to struct

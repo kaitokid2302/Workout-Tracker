@@ -1,0 +1,90 @@
+basePath: /
+definitions:
+  db.Exercise:
+    type: object
+  db.User:
+    type: object
+  db.Workout:
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a workout tracking application API
+  title: Workout Tracker API
+  version: "1.0"
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      parameters:
+      - description: User registration info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/db.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register new user
+      tags:
+      - user
+  /workout:
+    post:
+      consumes:
+      - application/json
+      description: Create empty workout
+      parameters:
+      - description: Worokout info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/db.Workout'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: workout
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create empty workout
+      tags:
+      - workout
+  /workout/{workoutID}/exercise:
+    post:
+      consumes:
+      - application/json
+      description: Add exercise to workout
+      parameters:
+      - description: Workout ID
+        in: path
+        name: workoutID
+        required: true
+        type: integer
+      - description: Exercise info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/db.Exercise'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: exercise
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Add exercise to workout
+      tags:
+      - workout
+swagger: "2.0"

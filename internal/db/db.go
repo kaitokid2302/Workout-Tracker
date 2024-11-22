@@ -13,7 +13,7 @@ type User struct {
 	Username string
 	Email    string
 	Password string
-	Workout  []Workout
+	Workout  []Workout `json:"omitempty"`
 }
 
 type Workout struct {
